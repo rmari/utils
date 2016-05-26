@@ -7,8 +7,10 @@ ifneq ("$(wildcard $(makeconfig))","")
         gotconfig = 1
 endif
 
+IPYTHON_DIR = $(shell ipython locate)
 install:
 	cp dict_utils.py $(ANACONDA_DIR)
+	cp jupyter_startup.ipy $(IPYTHON_DIR)/profile_default/startup/
 	chmod u+x gign
 	cp gign $(INSTALL_DIR)
 	chmod u+x gremadd
