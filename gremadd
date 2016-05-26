@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ $# -neq 2 ]
+if [ $# -ne 2 ]
   then
     echo " Usage: gremadd <name> <url>"
+    exit 1
 fi
 
 git remote add $1 $2

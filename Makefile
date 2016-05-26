@@ -11,3 +11,5 @@ install:
 	cp dict_utils.py $(ANACONDA_DIR)
 	chmod u+x gign
 	cp gign $(INSTALL_DIR)
+	chmod u+x gremadd
+	cp gremadd $(INSTALL_DIR)
