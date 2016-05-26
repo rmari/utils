@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for t in $@
+do
+    cat `find /home/rjm238/data/src/gitignore -name $t.gitignore` >> .gitignore
+done
