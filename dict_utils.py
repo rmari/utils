@@ -16,12 +16,14 @@ def merge(a_dict, key, value, merging_func):
 def matching(a_dict, substr):
     """
         Returns the items of the string-key dictionary `a_dict`
-        which keys matches the substring `substr`.
+        which keys matches all the substrings in `substr`.
     """
 
     items = []
+    if not isinstance(substr, list):
+        substr = [substr]
     for k in a_dict:
-        if k.find(substr) >= 0:
+        if sum([k.find(s) >= 0 for s in substr]) == len(substr):
             items.append((k, a_dict[k]))
     return items
 
@@ -30,7 +32,7 @@ def matching_uniq(a_dict, substr):
     """
         Returns, if it exists, the unique item
         of the string-key dictionary `a_dict`
-        which keys matches the substring `substr`.
+        which keys matches all the substrings in `substr`.
 
         Raises an exception when none or several keys match.
     """
