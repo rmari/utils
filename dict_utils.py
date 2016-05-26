@@ -22,7 +22,7 @@ def matching(a_dict, substr):
     items = []
     for k in a_dict:
         if k.find(substr) >= 0:
-            items.append(k, a_dict[k])
+            items.append((k, a_dict[k]))
     return items
 
 
