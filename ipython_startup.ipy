@@ -1,6 +1,7 @@
 %load_ext autoreload
 %autoreload 2
 
+from collections import namedtuple
 import numpy as np
 import ipykernel
 
@@ -10,8 +11,10 @@ try:
         import matplotlib
         import matplotlib.pyplot as plt
         %matplotlib inline
+        from matplotlib import animation
 
     # matplotlib params
+
     fig_size =  [9,5]
     params = {
               'font.size': 20,
@@ -23,10 +26,58 @@ try:
               'figure.figsize': fig_size
    	}
     plt.rcParams.update(params)
+
+    ### Movie machinery #########
+    class mplmov:
+        pass
+    mplmov.MovieAnnotateSeries = namedtuple('MovieAnnotateSeries', 'text, kwargs')
+    mplmov.MovieTextSeries = namedtuple('MovieTextSeries', 'xdata, ydata, text, kwargs')
+    mplmov.MovieQuiverSeries = namedtuple('MovieDataSeries', 'xdata, ydata, udata, vdata, kwargs')
+    mplmov.MovieDataSeries = namedtuple('MovieDataSeries', 'xdata, ydata, kwargs')
+    mplmov.MovieAxis = namedtuple('MovieAxis', 'ax, MovieDatas, kwargs')
+
+    def save_anim(anim, fname, writer='avconv', dpi=100, fps=8):
+        writer = matplotlib.animation.writers[writer](fps=fps)
+        anim.save(fname,writer=writer, dpi=dpi)
+
+    def movie_frame_plotter(frame_nb, movie_axes):
+        """
+        A helper function to create mpl movies with several axes.
+        
+        This is meant to be called by matplotlib.animation.FuncAnimation, i.e. 
+        the usage is:
+        matplotlib.animation.FuncAnimation(fig, movie_frame_plotter, nb_of_frames, fargs=(movie_axes,))
+        
+        Parameters:
+        ===========
+
+        movies_axes: a iterable containing instances of mplmov.MovieAxis.
+        """
+        for mAxis in movie_axes:
+            ax = mAxis.ax
+            ax.clear()
+            ax.set(**mAxis.kwargs)
+            for mData in mAxis.MovieDatas:
+                if isinstance(mData, mplmov.MovieDataSeries):
+                    ax.plot(mData.xdata[frame_nb], mData.ydata[frame_nb], **mData.kwargs)
+                if isinstance(mData, mplmov.MovieQuiverSeries):
+                    ax.quiver(mData.xdata[frame_nb], mData.ydata[frame_nb],
+                              mData.udata[frame_nb], mData.vdata[frame_nb],
+                              **mData.kwargs)
+                if isinstance(mData, mplmov.MovieTextSeries):
+                    ax.text(mData.xdata[frame_nb], mData.ydata[frame_nb],
+                            mData.text[frame_nb],
+                            **mData.kwargs)
+                if isinstance(mData, mplmov.MovieAnnotateSeries):
+                    ax.annotate(mData.text[frame_nb], **mData.kwargs)
+    
+    def array_duplicate(x, n):
+        shape = (n,)+tuple([1]*np.array(x).ndim)
+        return np.tile(x, shape)
+
 except AttributeError:
     pass
 
-from collections import namedtuple
 
 import importlib
 # lfdem_imports
