@@ -88,6 +88,12 @@ except ImportError as e:
     print(e.message)
 
 try:
+    clff = importlib.import_module("clfdem_file")
+except ImportError as e:
+    print("Could not import clfdem_file")
+    print(e.message)
+
+try:
     lfu = importlib.import_module("lfdem_utils")
 except ImportError as e:
     print("Could not import lfdem_utils")
