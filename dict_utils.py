@@ -38,8 +38,8 @@ def matching_uniq(a_dict, substr):
     """
     items = matching(a_dict, substr)
     if len(items) == 0:
-        raise Exception('No key matches the substring.')
+        raise KeyError('No key matches the substring.')
     if len(items) > 1:
-        raise Exception('Several keys match the substring.')
+        raise KeyError('Several keys match the substring.')
 
     return items[0]
