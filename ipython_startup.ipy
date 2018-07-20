@@ -75,6 +75,32 @@ try:
         shape = (n,)+tuple([1]*np.array(x).ndim)
         return np.tile(x, shape)
 
+    def parse_value(string, pattern, sep='_', fail=None, reverse=False):
+        """
+            get the value after 'pattern' in a string.
+            
+            It looks for the substring between (the last occurence of) 'pattern' and the following separator 'sep' (default is underscore).
+            Ex: parse_value("blabla_foo9.1_bar10_blabla.dat", foo) returns '9.1'.
+
+            If reverse=True, it looks for the substring between 'sep' and 'pattern'.
+            
+            If it fails, it returns fail (None is default).
+        """
+        
+        pattern_loc = string.rfind(pattern)
+        if pattern_loc > 0:
+            if reverse:
+                val = string[:pattern_loc]
+                sep_loc = val.rfind(sep)
+                val = val[sep_loc+len(sep):]
+            else:
+                val = string[pattern_loc+len(pattern):]
+                sep_loc = val.find(sep)
+                val = val[:sep_loc]
+            return val
+        else:
+            return fail
+
 except AttributeError:
     pass
 
