@@ -107,11 +107,6 @@ except AttributeError:
 
 import importlib
 # lfdem_imports
-try:
-    lff = importlib.import_module("lfdem_file")
-except ImportError as e:
-    print("Could not import lfdem_file")
-    print(e.message)
 
 try:
     clff = importlib.import_module("clfdem_file")
